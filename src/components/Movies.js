@@ -78,7 +78,6 @@ const Movies = (props) => {
   }, [location.search, category]);
 
   const loadMore = async () => {
-    setLoading(true);
     const data = await fetchData(page + 1);
     setResults(prev => [...prev, ...data.results]);
     setHasMore(data.page < data.total_pages);
