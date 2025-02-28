@@ -1,0 +1,6 @@
+.rating-bar {
+    width: 40px; /* Reduce the size of the gauge */
+    height: 40px; /* Reduce the size of the gauge */
+    position: absolute;
+    z-index: 10; /* Higher z-index to ensure it appears above other elements */
+  }
