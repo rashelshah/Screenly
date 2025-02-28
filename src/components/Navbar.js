@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+
 function Navbar() {
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
@@ -11,15 +12,12 @@ function Navbar() {
 
   return (
     <>
-    <nav className="navbar navbar-expand-lg">
+    <nav className="navbar navbar-expand-md">
   <div className="container-fluid">
   <Link className="navbar-brand" to="/">
-          <img 
-            src="/screenly-logo.png" 
-            alt="Screenly" 
-            className="navbar-logo d-inline-block align-top"
-          />
+          Screenly {/* Text added instead of image */}
         </Link>
+     
     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span className="navbar-toggler-icon"></span>
     </button>
@@ -62,6 +60,9 @@ function Navbar() {
           </ul>
         </li>
 
+        <Link className="nav-link active" aria-current="page" to="/toprated">Top Rated</Link>
+  
+
         <li className="nav-item dropdown">
           <Link className="nav-link dropdown-toggle" to="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Year
@@ -72,6 +73,8 @@ function Navbar() {
             <li><Link className="dropdown-item" to="/2023">2023</Link></li>
           </ul>
         </li>
+        <Link className="nav-link active" aria-current="page" to="/watchlist">Watch List</Link>
+
         <Link className="nav-link active" aria-current="page" to="/landing"></Link>
       </ul>
       <form className="d-flex" role="search" onSubmit={handleSearch}>

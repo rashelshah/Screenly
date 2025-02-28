@@ -11,7 +11,8 @@ import {
 
 function App() {
   const apiKey = process.env.REACT_APP_API_KEY; 
-  console.log("API key",apiKey);
+
+
   return (
    <>
     <Navbar/>
@@ -38,6 +39,8 @@ function App() {
       <Route path="/GB" element={<Movies country="GB" apiKey={apiKey} key="GB"/>}/>
       <Route path="/CN" element={<Movies country="CN" apiKey={apiKey} key="CN"/>}/>
       <Route path="/CA" element={<Movies country="CA" apiKey={apiKey} key="CA"/>}/>
+
+      <Route path="/toprated" element={<Movies movieList="top_rated" apiKey={apiKey}/>}/>
 
 
       <Route path="/2025" element={<Movies year="2025" apiKey={apiKey} key={2025}/>}/>

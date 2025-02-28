@@ -40,11 +40,9 @@ const Movies = (props) => {
   console.log("Country ID:", props.country);
   console.log("Year ID:", props.year);
   console.log("Category:", category);
+  console.log("Movie List:", props.movieList);
 
 
-
- 
-  
 
   const getSearchQuery = () => {
     const params = new URLSearchParams(location.search);
@@ -83,8 +81,14 @@ const Movies = (props) => {
     setHasMore(data.page < data.total_pages);
     setPage(prev => prev + 1);
   };
+  const movieList = "top_rated";
+
   const updateMovies = async ()=>{
-  let url = `https://api.themoviedb.org/3/discover/${category}?api_key=${props.apiKey}&sort_by=popularity.desc`;   
+     let url = `https://api.themoviedb.org/3/discover/${category}?api_key=${props.apiKey}&sort_by=popularity.desc`;   
+
+    if(props.movieList){
+      url = `https://api.themoviedb.org/3/${category}/top_rated?api_key=${props.apiKey}&sort_by=popularity.desc`;
+    } 
 
   if(props.genre_id) {
     url += `&with_genres=${props.genre_id}`;
@@ -110,11 +114,15 @@ const Movies = (props) => {
 
   useEffect(() => { 
      updateMovies();
-  }, [props.genre_id, props.country,props.year,category]);
+  }, [props.genre_id, props.country,props.year,category, props.movieList]);
 
   const getActiveFilters = () => {
     const filters = [];
     
+    if (props.movieList === "top_rated") {
+      filters.push("Top Rated");
+    }
+
     if(props.genre_id && genres[props.genre_id]) {
       filters.push(genres[props.genre_id]);
     }
