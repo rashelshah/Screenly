@@ -7,6 +7,10 @@ const LandingPage = () => {
   const { title, poster, overview, genre_id, id, media_type  } = location.state || {};
   const [cast, setCast] = useState([]);
 
+  useEffect(() => {
+    document.documentElement.scrollTop = 0; // Reset scroll position
+  }, []);
+
   const genreMapping = {
     28: 'Action',
     12: 'Adventure',
@@ -39,6 +43,7 @@ const LandingPage = () => {
         if (!response.ok) throw new Error('Failed to fetch cast');
         const data = await response.json();
         setCast(data.cast.slice(0, 12)); // Show top 12 cast members
+
       } catch (error) {
         console.error('Cast fetch error:', error);
         setCast([]);

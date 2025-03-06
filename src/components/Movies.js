@@ -185,7 +185,7 @@ const Movies = (props) => {
         >
     <div className='row' style={{marginTop:'1px'}}>
       {results.map((element)=>{
-      return <div className="col-md-2">
+      return <div className="col-6 col-md-2">
          <Movieitem
          key={element.id}
          title={element.title|| element.name}
