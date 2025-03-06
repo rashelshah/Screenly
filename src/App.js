@@ -15,11 +15,6 @@ import Alert from './components/Alert';
 function App() {
   const apiKey = process.env.REACT_APP_API_KEY; 
   const [alert, setAlert] = useState(null);
-
-
-
-
-
   
   
   const showAlert = (message, type)=>{
@@ -37,7 +32,6 @@ function App() {
 
   return (
    <>
-       
     <Navbar/>
     <Alert alert={alert}/>
     <Routes>

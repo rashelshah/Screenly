@@ -14,9 +14,8 @@ function Navbar() {
   const handleLogout = () => {
     localStorage.removeItem("auth-token");
     navigate('/login');
-  }
+  };
 
-  // Hide search bar on the login page
   const showSearchBar = location.pathname !== '/login' && location.pathname !== '/signup';
 
   return (
@@ -27,16 +26,23 @@ function Navbar() {
             Screenly
           </Link>
           
-          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <button 
+            className="navbar-toggler" 
+            type="button" 
+            data-bs-toggle="collapse" 
+            data-bs-target="#navbarSupportedContent" 
+            aria-controls="navbarSupportedContent" 
+            aria-expanded="false" 
+            aria-label="Toggle navigation"
+          >
             <span className="navbar-toggler-icon"></span>
           </button>
           
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
+            <ul className="navbar-nav mx-auto mb-2 mb-md-0">
               <li className="nav-item">
                 <Link className="nav-link active" aria-current="page" to="/home">Home</Link>
               </li>
-              
               <li className="nav-item dropdown">
                 <Link className="nav-link dropdown-toggle" to="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   Genre
@@ -53,7 +59,6 @@ function Navbar() {
                   <li><Link className="dropdown-item" to="/horror">Horror</Link></li>
                 </ul>
               </li>
-
               <li className="nav-item dropdown">
                 <Link className="nav-link dropdown-toggle" to="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   Country
@@ -70,11 +75,9 @@ function Navbar() {
                   <li><Link className="dropdown-item" to="/CA">Canada</Link></li>
                 </ul>
               </li>
-
               <li className="nav-item">
-                <Link className="nav-link active" aria-current="page" to="/toprated">Top</Link>
+                <Link className="nav-link active" aria-current="page" to="/toprated">Top Rated</Link>
               </li>
-
               <li className="nav-item dropdown">
                 <Link className="nav-link dropdown-toggle" to="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   Year
@@ -85,13 +88,11 @@ function Navbar() {
                   <li><Link className="dropdown-item" to="/2023">2023</Link></li>
                 </ul>
               </li>
-              
               <li className="nav-item">
                 <Link className="nav-link active" aria-current="page" to="/watchlist">Watchlist</Link>
               </li>
             </ul>
 
-            {/* Right-aligned Auth Buttons */}
             <div className="ms-auto d-flex auth-buttons">
               {!localStorage.getItem("auth-token") ? (
                 <>
@@ -115,21 +116,49 @@ function Navbar() {
         </div>
       </nav>
 
-      {/* Conditionally render the search bar */}
       {showSearchBar && (
-        <div className="container-fluid bg-dark py-3">
+        <div className="search-section">
           <div className="container">
-            <form className="d-flex search-form" role="search" onSubmit={handleSearch}>
-              <input
-                className="form-control me-2"
-                type="search"
-                placeholder="Search movies..."
-                aria-label="Search"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-              <button className="btn btn-outline-success" type="submit">
-                Search
+            <h2 className="search-heading">Find Movies, TV Shows, and More</h2>
+            <form className="search-form" role="search" onSubmit={handleSearch}>
+              <div className="input-group">
+                <span className="input-group-text">
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#FFD700"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                  </svg>
+                </span>
+                <input
+                  className="form-control"
+                  type="search"
+                  placeholder="Enter keywords..."
+                  aria-label="Search"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
+              <button className="btn btn-search" type="submit">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#000"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <polyline points="9 18 15 12 9 6" />
+                </svg>
               </button>
             </form>
           </div>
