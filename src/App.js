@@ -9,7 +9,7 @@ import {
 } from "react-router-dom";
 import Login from './components/Authentication/Login';
 import Signup from './components/Authentication/Signup';
-import Alert from './components/Alert';
+
 
 
 function App() {
@@ -32,8 +32,7 @@ function App() {
 
   return (
    <>
-    <Navbar/>
-    <Alert alert={alert}/>
+    <Navbar alert={alert}/>
     <Routes>
       <Route path="/" element={<Movies  apiKey={apiKey}/>}/>
       <Route path="/home" element={<Movies apiKey={apiKey}/>}/>
