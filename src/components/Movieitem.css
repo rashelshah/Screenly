@@ -1,0 +1,102 @@
+.movie-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative; /* Ensure the container is relative for absolute positioning inside */
+  cursor: pointer;
+}
+.movie-item:hover{
+  transform: scale(1.05);
+  transition: transform 0.5s;
+}
+.image-container {
+  position: relative;
+  width: 100%;
+}
+
+.card-img-top {
+  border-radius: 20px;
+  margin-bottom: 5px;
+  width: 100%;
+}
+
+.card-img-top:hover {
+  opacity: 0.6;
+}
+
+.image-container .rating-bar {
+  position: absolute;
+  bottom: -10px; /* Adjust this value to position the rating bar */
+  left: 5px; /* Adjust this value to position the rating bar */
+  z-index: 200;
+}
+
+.card-title {
+  width: 100%;
+  text-align: center;
+  margin-top: 20px; /* Add some space between the poster and the title/date */
+}
+
+.card-date{
+color: grey;
+}
+
+.btn-category {
+  background: transparent;
+  border: 2px solid #FFD700;
+  color: #FFD700 !important;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  margin: 0 10px;
+  border-radius: 25px;
+  padding: 8px 25px;
+}
+
+.btn-category.active {
+  background: #FFD700 !important;
+  color: #1a1a1a !important;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+}
+
+.btn-category:hover:not(.active) {
+  background: rgba(255, 215, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+
+.play-icon {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 40px; /* Adjust size */
+  color: white;
+  opacity: 0; /* Initially hidden */
+  transition: opacity 0.3s ease-in-out;
+  z-index: 300;
+}
+.play-icon:hover {
+  color: #f4c10f;
+
+}
+
+/* Show play icon on hover */
+.movie-item:hover .play-icon {
+  opacity: 1;
+}
+.watchlist-icon {
+  position: absolute;
+  top: 10px; /* Adjust this value to position it vertically */
+  right: 10px; /* Position it at the top-right corner */
+  font-size: 30px; /* Adjust size */
+  color: white;
+  opacity: 1; /* Make it visible */
+  transition: opacity 0.3s ease-in-out;
+  z-index: 300;
+  cursor: pointer; /* Add pointer cursor for better UX */
+}
+
+.watchlist-icon:hover {
+  color: #FFD700; /* Change color on hover */
+  transform: scale(1.1); /* Slightly enlarge on hover */
+}

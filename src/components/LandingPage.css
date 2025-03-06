@@ -1,0 +1,263 @@
+/* LandingPage.css */
+.landing-page {
+  position: relative;
+  min-height: 100vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Enhanced background image */
+.background-image {
+  position: fixed; /* Changed from absolute to fixed */
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+  filter: brightness(0.4);
+  overflow: hidden;
+}
+
+.background-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  min-width: 100%;
+  min-height: 100%;
+}
+
+/* Rest of the CSS remains the same */
+.card-img1 {
+  width: 300px;
+  height: 450px;
+  object-fit: cover;
+  border-radius: 20px;
+  z-index: 2;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  margin-right: 2rem;
+}
+
+.movie-content {
+  position: relative;
+  top: 0;
+  left: 0;
+  transform: none;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 50px;
+  z-index: 3;
+  width: 90%;
+  max-width: 1200px;
+  margin: 60px auto 0;
+  padding: 2rem;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.movie-content::-webkit-scrollbar {
+  display: none;
+}
+
+.movie-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  color: white;
+  text-align: left;
+  justify-content: center;
+}
+
+h1 {
+  color: white;
+  font-size: 2.5rem;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+  word-wrap: break-word;
+}
+
+.description {
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 300;
+  line-height: 1.5;
+  border-radius: 10px;
+  z-index: 3;
+  text-align: left;
+  margin-bottom: 20px;
+  max-width: 800px;
+}
+
+.genre {
+  margin-bottom: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.genre span {
+  border-radius: 2rem;
+  border: 2px solid white;
+  padding: 7px;
+}
+
+.cast-section {
+  margin-top: auto;
+  padding-top: 2rem;
+}
+
+.cast-section h2 {
+  color: white;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid #e50914;
+  padding-left: 1rem;
+  text-align: left;
+}
+
+.cast-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem 0;
+}
+
+.cast-member {
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.cast-member:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.cast-photo {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-bottom: 2px solid #e50914;
+}
+
+.cast-info {
+  padding: 1rem;
+  text-align: center;
+}
+
+.cast-info h4 {
+  color: white;
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+}
+
+.cast-info p {
+  color: #cccccc;
+  margin: 0.3rem 0 0;
+  font-size: 0.85rem;
+  font-style: italic;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+}
+
+.cast-grid > p {
+  color: white;
+  font-size: 1.2rem;
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 2rem;
+}
+
+/* Mobile-specific styles */
+@media (max-width: 767px) {
+  .card-img1 {
+    display: none;
+  }
+
+  .movie-content {
+    flex-direction: column;
+    margin-top: 20px;
+    padding-top: 0;
+    gap: 20px;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+    padding: 0;
+    text-align: center;
+  }
+
+  .description {
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .cast-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .cast-section h2 {
+    font-size: 1.5rem;
+    text-align: center;
+    border-left: none;
+    padding-left: 0;
+  }
+}
+
+/* Tablet/Surface Duo styles */
+@media (min-width: 600px) and (max-width: 900px) {
+  .card-img1 {
+    width: 250px;
+    height: 375px;
+  }
+
+  .movie-content {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 30px;
+  }
+
+  .movie-details {
+    justify-content: flex-start;
+  }
+
+  .cast-grid {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  }
+}
+
+/* Desktop styles */
+@media (min-width: 900px) {
+  .movie-content {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 50px;
+  }
+
+  .movie-details {
+    justify-content: center;
+  }
+
+  .card-img1 {
+    width: 300px;
+    height: 450px;
+  }
+}
+
+.movie-details > * {
+  max-width: 100%;
+  overflow-wrap: break-word;
+}

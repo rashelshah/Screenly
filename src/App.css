@@ -1,0 +1,287 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0px;
+    background: linear-gradient(135deg, #1a1a1a, #0d0d0d, #000000);
+    background-attachment: fixed;
+    font-family: 'Arial', sans-serif;
+}
+
+.container {
+    background: transparent;
+    color: white;
+    padding-top: 50px;
+    z-index: 1;
+}
+
+/* Enhanced Navbar Styling */
+.navbar {
+    background: linear-gradient(135deg, rgba(26,26,26,0.95), rgba(13,13,13,0.95)) !important;
+    backdrop-filter: blur(10px);
+    border-bottom: none !important;
+    padding: 0.5rem 1rem;
+    z-index: 1000;
+}
+
+.navbar .navbar-brand {
+    color: #FFD700 !important;
+    font-size: 1.5rem; /* Reduced size for better fit */
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-shadow: 
+        0 0 10px rgba(255, 215, 0, 0.5),
+        0 0 20px rgba(255, 215, 0, 0.3),
+        0 0 30px rgba(255, 215, 0, 0.2);
+    animation: glow 2s ease-in-out infinite alternate;
+    margin-right: 10px; /* Added margin for spacing */
+}
+
+@keyframes glow {
+    from {
+        text-shadow: 
+            0 0 5px #FFD700,
+            0 0 10px rgba(255, 215, 0, 0.5),
+            0 0 15px rgba(255, 215, 0, 0.3);
+    }
+    to {
+        text-shadow: 
+            0 0 10px #FFD700,
+            0 0 20px rgba(255, 215, 0, 0.7),
+            0 0 30px rgba(255, 215, 0, 0.5);
+    }
+}
+
+/* Center navbar items on medium devices */
+.navbar-nav.mx-auto {
+    display: flex;
+    justify-content: center;
+    width: auto; /* Changed from 100% to auto */
+    flex-wrap: nowrap; /* Prevent wrapping of nav items */
+}
+
+/* Adjusted medium screen styles */
+@media (min-width: 768px) and (max-width: 1199px) {
+    .navbar-nav.mx-auto {
+        justify-content: flex-start; /* Align left instead of center */
+    }
+    
+    .navbar-nav.mx-auto .nav-item {
+        margin: 0 3px; /* Reduced margins for better fit */
+    }
+    
+    .auth-buttons {
+        margin-left: 10px; /* Reduced margin */
+    }
+    
+    .navbar .nav-link {
+        margin: 0 5px; /* Reduced side margins */
+        font-size: 0.95rem; /* Smaller font size */
+        padding: 0.5rem 0.5rem; /* Reduced padding */
+    }
+}
+
+/* iPad Air and similar device specific adjustments */
+@media (min-width: 820px) and (max-width: 1180px) {
+    .navbar-nav.mx-auto .nav-item {
+        margin: 0 2px; /* Further reduced margins */
+    }
+    
+    .navbar .nav-link {
+        font-size: 0.9rem; /* Even smaller font */
+        margin: 0 3px; /* Minimal margins */
+        padding: 0.5rem 0.3rem;
+    }
+    
+    .navbar .navbar-brand {
+        font-size: 1.4rem; /* Smaller brand */
+        margin-right: 5px;
+    }
+    
+    .navbar .btn-outline-success {
+        padding: 0.4rem 1rem; /* Smaller buttons */
+        font-size: 0.9rem;
+    }
+}
+
+.navbar .nav-link {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-size: 1.1rem;
+    margin: 0 15px;
+    transition: all 0.3s ease;
+    position: relative;
+    white-space: nowrap; /* Prevent text wrapping */
+}
+
+.navbar .nav-link:hover {
+    color: #FFD700 !important;
+    transform: translateY(-2px);
+}
+
+.navbar .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #FFD700;
+    transition: width 0.3s ease;
+}
+
+.navbar .nav-link:hover::after {
+    width: 100%;
+}
+
+.navbar .dropdown-menu {
+    background-color: #1a1a1a !important;
+    border: 1px solid rgba(255, 215, 0, 0.1) !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3)  !important;
+    z-index: 1001 !important;
+}
+
+.navbar .dropdown-item {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+.navbar .dropdown-item:hover {
+    background-color: rgba(255, 215, 0, 0.1) !important;
+    color: #FFD700 !important;
+}
+
+.navbar .navbar-toggler-icon {
+    filter: invert(1);
+    background-size: 1.2rem;
+    cursor: pointer;
+}
+
+/* Auth Buttons Styling */
+.navbar .btn-outline-success {
+    color: #FFD700 !important;
+    border-color: #FFD700 !important;
+    border-radius: 25px;
+    margin-left: 10px;
+    transition: all 0.3s ease;
+    padding: 0.5rem 1.2rem; /* Reduced padding */
+    font-weight: 500;
+    font-size: 0.95rem; /* Slightly smaller font */
+}
+
+.navbar .btn-outline-success:hover {
+    background: rgba(255, 215, 0, 0.1) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+/* Expanded Search Bar Styling */
+.container-fluid.bg-dark {
+    background: linear-gradient(135deg, rgba(26,26,26,0.95), rgba(13,13,13,0.95)) !important;
+    border-bottom: none !important;
+    padding: 1rem 0;
+    margin-top: -1px;
+}
+
+.container-fluid.bg-dark .form-control {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 215, 0, 0.2) !important;
+    color: white !important;
+    border-radius: 25px;
+    padding: 0.75rem 1.5rem; /* Reduced padding */
+    height: 50px !important; /* Reduced height */
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.1);
+    font-size: 1rem;
+}
+
+.container-fluid.bg-dark .form-control:focus {
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+    border-color: #FFD700;
+    outline: none;
+}
+
+/* Search Form Styling */
+.search-form {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+/* Search Button Styling */
+.container-fluid.bg-dark .btn-outline-success {
+    height: 50px !important; /* Match search input height */
+    min-width: 100px; /* Reduced width */
+    border-radius: 25px;
+    padding: 0.5rem 1.2rem;
+    margin-left: 10px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #FFD700 !important;
+    border-color: #FFD700 !important;
+}
+
+.container-fluid.bg-dark .btn-outline-success:hover {
+    background: rgba(255, 215, 0, 0.1) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+}
+
+/* Large tablet / small laptop breakpoint adjustments */
+@media (min-width: 992px) and (max-width: 1199px) {
+    .navbar .navbar-brand {
+        font-size: 1.4rem;
+    }
+    
+    .navbar-nav.mx-auto .nav-item {
+        margin: 0 3px;
+    }
+    
+    .navbar .nav-link {
+        font-size: 0.95rem;
+        margin: 0 5px;
+        padding: 0.5rem 0.4rem;
+    }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .navbar .navbar-brand {
+        font-size: 1.5rem;
+    }
+    
+    .navbar .nav-link {
+        margin: 5px 0;
+        padding: 10px;
+    }
+    
+    .navbar .btn-outline-success {
+        margin: 5px 0;
+        width: 100%;
+    }
+    
+    .container-fluid.bg-dark .container {
+        padding: 0 15px;
+    }
+    
+    .search-form {
+        flex-direction: row;
+        align-items: center;
+    }
+    
+    .container-fluid.bg-dark .form-control {
+        height: 50px !important;
+        padding: 0.75rem 1.5rem;
+        flex: 1;
+    }
+    
+    .container-fluid.bg-dark .btn-outline-success {
+        height: 50px !important;
+        width: auto;
+        margin-left: 10px;
+        white-space: nowrap;
+    }
+    
+    .container-fluid.bg-dark {
+        padding: 0.5rem 0;
+    }
+}
