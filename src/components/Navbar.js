@@ -1,7 +1,8 @@
+import Alert from './Alert';
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 
-function Navbar() {
+function Navbar({alert}) {
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
@@ -115,6 +116,7 @@ function Navbar() {
           </div>
         </div>
       </nav>
+      <Alert alert={alert}/>
 
       {showSearchBar && (
         <div className="search-section">

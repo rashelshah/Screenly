@@ -1,0 +1,58 @@
+.alert-container {
+    position: relative;
+    width: 100%;
+    z-index: 1000; /* Ensure it appears above other content */
+    display: flex;
+    justify-content: center;
+    padding: 0.5rem 0;
+}
+
+/* Base alert styling */
+.alert {
+    background: linear-gradient(135deg, rgba(26, 26, 26, 0.95), rgba(13, 13, 13, 0.95)) !important;
+    backdrop-filter: blur(10px);
+    border: 1px solid #FFD700 !important;
+    color: #FFD700 !important;
+    border-radius: 25px;
+    padding: 0.75rem 1.5rem;
+    margin: 0;
+    max-width: 600px;
+    width: 90%;
+    box-shadow: 
+        0 0 10px rgba(255, 215, 0, 0.3),
+        0 0 20px rgba(255, 215, 0, 0.2);
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+/* Alert type-specific styling */
+.alert-success {
+    background: linear-gradient(135deg, rgba(40, 167, 69, 0.2), rgba(13, 13, 13, 0.95)) !important;
+}
+
+.alert-error {
+    background: linear-gradient(135deg, rgba(220, 53, 69, 0.2), rgba(13, 13, 13, 0.95)) !important;
+}
+
+.alert-info {
+    background: linear-gradient(135deg, rgba(0, 123, 255, 0.2), rgba(13, 13, 13, 0.95)) !important;
+}
+
+.alert-warning {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.2), rgba(13, 13, 13, 0.95)) !important;
+}
+
+/* Strong text inside alert */
+.alert strong {
+    color: #FFD700;
+    text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+    .alert {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+        max-width: 90%;
+    }
+}
