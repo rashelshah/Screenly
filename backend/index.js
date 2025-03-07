@@ -8,7 +8,10 @@ const app = express()
 const port = 4000
 
 app.use(cors({
-  origin: ["https://screenly-pi.vercel.app"], // Replace with your Vercel URL
+  origin: [
+    "screenly-2gbhallug-rashel-shahs-projects.vercel.app", // Production frontend
+    "http://localhost:3000"           // Local frontend
+  ],
   methods: "GET,POST",
   credentials: true
 }));
