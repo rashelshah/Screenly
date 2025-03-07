@@ -8,7 +8,7 @@ const Signup = (props) => {
 
   const handleClick = async (e) => {
     e.preventDefault();
-    const response = await fetch("https://screenly-qpdq.onrender.com/api/auth/createuser", {
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/createuser`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
