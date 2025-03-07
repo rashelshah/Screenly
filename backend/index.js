@@ -9,7 +9,7 @@ const port = 4000
 
 app.use(cors({
   origin: [
-    "screenly-2gbhallug-rashel-shahs-projects.vercel.app", // Production frontend
+    "https://screenly-pi.vercel.app", // Production frontend
     "http://localhost:3000"           // Local frontend
   ],
   methods: "GET,POST",
