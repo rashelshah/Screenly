@@ -7,14 +7,7 @@ connectToMongo();
 const app = express()
 const port = 4000
 
-app.use(cors({
-  origin: [
-    "https://screenly-pi.vercel.app", // Production frontend
-    "http://localhost:3000"           // Local frontend
-  ],
-  methods: "GET,POST",
-  credentials: true
-}));
+app.use(cors());
 app.use(express.json());
 
 
