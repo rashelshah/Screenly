@@ -1,5 +1,9 @@
+require('dotenv').config({ path: './backend/.env' });
 const mongoose = require('mongoose');
-const URI = "mongodb://localhost:27019/Data"
+
+// Connect to MongoDB
+
+const URI = process.env.MONGO_URI;
 
 async function connectToMongo(){
 await mongoose.connect(URI)
