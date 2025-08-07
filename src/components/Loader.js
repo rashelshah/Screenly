@@ -27,7 +27,7 @@ const StyledWrapper = styled.div`
 
   .three-body {
    --uib-size: 70px; /* Increased from 35px */
-   --uib-speed: 1s; /* Slightly slower animation */
+   --uib-speed: 2s; /* Slightly slower animation */
    --uib-color: #FFD700; /* Changed to gold color */
    position: relative;
    height: var(--uib-size);
