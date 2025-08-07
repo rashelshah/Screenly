@@ -2,14 +2,38 @@ import React,{useState, useEffect} from 'react';
 import './LandingPage.css';
 import { useLocation } from 'react-router-dom';
 
-const LandingPage = () => {
+const LandingPage = (props) => {
   const location = useLocation();
   const { title, poster, overview, genre_id, id, media_type  } = location.state || {};
   const [cast, setCast] = useState([]);
+  const [inWatchlist, setInWatchlist] = useState(false);
 
   useEffect(() => {
     document.documentElement.scrollTop = 0; // Reset scroll position
   }, []);
+
+  useEffect(() => {
+    const watchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
+    const isInWatchlist = watchlist.some((movie) => movie.id === id);
+    setInWatchlist(isInWatchlist);
+  }, [id]);
+  
+  const toggleWatchlist = () => {
+    const watchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
+    const movieIndex = watchlist.findIndex((movie) => movie.id === id);
+
+    if (movieIndex !== -1) {
+      // Movie is already in watchlist, remove it
+      watchlist.splice(movieIndex, 1);
+      setInWatchlist(false);
+    } else {
+      // Movie is not in watchlist, add it
+      watchlist.push({ title, poster, overview, genre_id, id, media_type });
+      setInWatchlist(true);
+    }
+
+    localStorage.setItem('watchlist', JSON.stringify(watchlist));
+  };
 
   const genreMapping = {
     28: 'Action',
@@ -80,6 +104,14 @@ const LandingPage = () => {
             <span key={i} className='genre-box'>{genre} </span>
             ))}
             </div>
+            <div className='watchlist-button'>
+            <button
+                type="button"
+                className="btn btn-outline-success mx-2"
+                onClick={toggleWatchlist}
+              >
+                {inWatchlist ? 'Remove From WatchList' : 'Add To WatchList'}
+              </button>            </div>
             <div className="cast-section">
             <h2>Top Cast</h2>
             <div className="cast-grid">

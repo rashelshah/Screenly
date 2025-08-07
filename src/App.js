@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 import Login from './components/Authentication/Login';
 import Signup from './components/Authentication/Signup';
+import Watchlist from './components/Watchlist'; 
 
 
 
@@ -69,6 +70,8 @@ function App() {
       <Route exact path="/signup" element={<Signup showAlert={showAlert} />} />
 
       <Route path="/landingpage" element={<LandingPage apiKey={apiKey}/>}/>
+
+      <Route path="/watchlist" element={<Watchlist />} />
       
     </Routes>
    </>

@@ -1,6 +1,7 @@
 require('dotenv').config({ path: './backend/.env' });
 const mongoose = require('mongoose');
 
+// port is 27019
 // Connect to MongoDB
 
 const URI = process.env.MONGO_URI;
