@@ -317,18 +317,19 @@ const LandingPage = (props) => {
                         setIsSimilarLoading(true);
 
                         // Navigate to the new movie/show page
-                        navigate('/landingpage', {
-                          state: {
-                            title: item.title || item.name,
-                            poster: item.poster_path,
-                            overview: item.overview,
-                            genre_id: item.genre_ids,
-                            id: item.id,
-                            media_type: media_type
-                          }
-                        })
-                      
-                        }}
+                        setTimeout(() => {
+                          navigate('/landingpage', {
+                            state: {
+                              title: item.title || item.name,
+                              poster: item.poster_path,
+                              overview: item.overview,
+                              genre_id: item.genre_ids,
+                              id: item.id,
+                              media_type: media_type
+                            }
+                          });
+                        }, 300); // 300ms works well
+                      }}
                       style={{ cursor: 'pointer' }}
                     >
                       <img
