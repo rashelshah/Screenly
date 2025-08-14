@@ -16,10 +16,9 @@ const LandingPage = (props) => {
   const [similarContent, setSimilarContent] = useState([]);
   const [isSimilarLoading, setIsSimilarLoading] = useState(true);
 
-  useEffect(() => {
-    document.documentElement.scrollTop = 0; // Reset scroll position
-  }, []);
-
+useEffect(() => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}, [id]);
   // Update the trailer fetching useEffect
   useEffect(() => {
     const fetchTrailer = async () => {
@@ -310,10 +309,7 @@ const LandingPage = (props) => {
                       key={item.id} 
                       className="similar-item"
                       onClick={() => {
-                        window.scrollTo({
-                              top: 0,
-                              behavior: 'smooth' // smooth scrolling
-                            });
+                      
                         setIsSimilarLoading(true);
 
                         // Navigate to the new movie/show page
