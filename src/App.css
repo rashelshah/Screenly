@@ -329,3 +329,12 @@ html, body {
         max-width: 700px;
     }
 }
+
+.alert {
+    opacity: 1;
+    transition: opacity 0.5s ease; /* fade animation */
+  }
+  
+  .alert.hide {
+    opacity: 0;
+  }

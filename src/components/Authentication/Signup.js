@@ -1,5 +1,3 @@
-
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -108,8 +106,17 @@ const Signup = (props) => {
             />
           </div>
           <button className="button-submit">Sign Up</button>
-          <div className="flex-row">
-            <button className="btn google">
+          <div className="flex-row-center">
+          <a href="http://localhost:4000/auth/google">
+        <button
+              type="button"
+              className="btn google"
+              onClick={(e) => {
+                e.preventDefault(); // stop the form from submitting
+                window.location.href = "http://localhost:4000/auth/google";
+              }}
+
+>
               <svg version="1.1" width={20} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                 <path style={{ fill: '#FBBB00' }} d="M113.47,309.408L95.648,375.94l-65.139,1.378C11.042,341.211,0,299.9,0,256c0-42.451,10.324-82.483,28.624-117.732h0.014l57.992,10.632l25.404,57.644c-5.317,15.501-8.215,32.141-8.215,49.456C103.821,274.792,107.225,292.797,113.47,309.408z" />
                 <path style={{ fill: '#518EF8' }} d="M507.527,208.176C510.467,223.662,512,239.655,512,256c0,18.328-1.927,36.206-5.598,53.451c-12.462,58.683-45.025,109.925-90.134,146.187l-0.014-0.014l-73.044-3.727l-10.338-64.535c29.932-17.554,53.324-45.025,65.646-77.911h-136.89V208.176h138.887L507.527,208.176z" />
@@ -118,176 +125,14 @@ const Signup = (props) => {
               </svg>
               Google
             </button>
+          </a>
           </div>
         </form>
       </StyledWrapper>
     </>
   );
 };
-
-
-{/*import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
-const Signup = (props) => {
-  const [credentials, setCredentials] = useState({ 
-    email: "", 
-    password: "", 
-    name: "",
-    cpassword: "" 
-  });
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    // Password confirmation check
-    if (credentials.password !== credentials.cpassword) {
-      props.showAlert("Passwords don't match", "danger");
-      return;
-    }
-  
-    try {
-      const response = await fetch("http://localhost:4000/api/auth/createuser", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ 
-          email: credentials.email, 
-          password: credentials.password, 
-          name: credentials.name 
-        }),
-      });
-  
-      const json = await response.json();
-  
-      if (!json.success) {
-        throw new Error(json.error || "Signup failed");
-      }
-  
-      // Store the session token
-      if (json.token) {
-        localStorage.setItem("sb-access-token", json.token);
-      }
-  
-      // Store user data if available
-      if (json.user) {
-        localStorage.setItem("user", JSON.stringify(json.user));
-      }
-  
-      navigate('/');
-      props.showAlert("Account Created Successfully", "success");
-  
-    } catch (error) {
-      console.error("Signup error:", error);
-      props.showAlert(error.message || "Signup failed. Please try again.", "danger");
-    }
-  };
-
-  const onChange = (e) => {
-    setCredentials({ ...credentials, [e.target.name]: e.target.value });
-  };
-
-  return (
-    <>
-      <h2 style={{ color: "white", textAlign: "center", marginBottom: "1rem" }}>
-        Sign Up to Continue
-      </h2>
-      <StyledWrapper>
-        <form className="form" onSubmit={handleSubmit}>
-          {/* Name Field 
-          <div className="flex-column">
-            <label htmlFor="name">Name</label>
-          </div>
-          <div className="inputForm">
-            <input
-              type="text"
-              className="input"
-              name="name"
-              id="name"
-              onChange={onChange}
-              minLength={3}
-              required
-              placeholder="Enter your Name"
-              value={credentials.name}
-            />
-          </div>
-
-          {/* Email Field 
-          <div className="flex-column">
-            <label htmlFor="email">Email</label>
-          </div>
-          <div className="inputForm">
-            <svg height={20} viewBox="0 0 32 32" width={20} xmlns="http://www.w3.org/2000/svg">
-              <path d="m30.853 13.87a15 15 0 0 0 -29.729 4.082 15.1 15.1 0 0 0 12.876 12.918 15.6 15.6 0 0 0 2.016.13 14.85 14.85 0 0 0 7.715-2.145 1 1 0 1 0 -1.031-1.711 13.007 13.007 0 1 1 5.458-6.529 2.149 2.149 0 0 1 -4.158-.759v-10.856a1 1 0 0 0 -2 0v1.726a8 8 0 1 0 .2 10.325 4.135 4.135 0 0 0 7.83.274 15.2 15.2 0 0 0 .823-7.455zm-14.853 8.13a6 6 0 1 1 6-6 6.006 6.006 0 0 1 -6 6z" />
-            </svg>
-            <input
-              type="email"
-              className="input"
-              name="email"
-              id="email"
-              onChange={onChange}
-              required
-              placeholder="Enter your Email"
-              value={credentials.email}
-            />
-          </div>
-
-          {/* Password Field 
-          <div className="flex-column">
-            <label htmlFor="password">Password</label>
-          </div>
-          <div className="inputForm">
-            <svg height={20} viewBox="-64 0 512 512" width={20} xmlns="http://www.w3.org/2000/svg">
-              <path d="m336 512h-288c-26.453125 0-48-21.523438-48-48v-224c0-26.476562 21.546875-48 48-48h288c26.453125 0 48 21.523438 48 48v224c0 26.476562-21.546875 48-48 48zm-288-288c-8.8125 0-16 7.167969-16 16v224c0 8.832031 7.1875 16 16 16h288c8.8125 0 16-7.167969 16-16v-224c0-8.832031-7.1875-16-16-16zm0 0" />
-              <path d="m304 224c-8.832031 0-16-7.167969-16-16v-80c0-52.929688-43.070312-96-96-96s-96 43.070312-96 96v80c0 8.832031-7.167969 16-16 16s-16-7.167969-16-16v-80c0-70.59375 57.40625-128 128-128s128 57.40625 128 128v80c0 8.832031-7.167969 16-16 16zm0 0" />
-            </svg>
-            <input
-              type="password"
-              className="input"
-              onChange={onChange}
-              name="password"
-              id="password"
-              minLength={6}
-              required
-              placeholder="Enter your Password"
-              value={credentials.password}
-            />
-          </div>
-
-          {/* Confirm Password Field 
-          <div className="inputForm">
-            <svg height={20} viewBox="-64 0 512 512" width={20} xmlns="http://www.w3.org/2000/svg">
-              <path d="m336 512h-288c-26.453125 0-48-21.523438-48-48v-224c0-26.476562 21.546875-48 48-48h288c26.453125 0 48 21.523438 48 48v224c0 26.476562-21.546875 48-48 48zm-288-288c-8.8125 0-16 7.167969-16 16v224c0 8.832031 7.1875 16 16 16h288c8.8125 0 16-7.167969 16-16v-224c0-8.832031-7.1875-16-16-16zm0 0" />
-              <path d="m304 224c-8.832031 0-16-7.167969-16-16v-80c0-52.929688-43.070312-96-96-96s-96 43.070312-96 96v80c0 8.832031-7.167969 16-16 16s-16-7.167969-16-16v-80c0-70.59375 57.40625-128 128-128s128 57.40625 128 128v80c0 8.832031-7.167969 16-16 16zm0 0" />
-            </svg>
-            <input
-              type="password"
-              className="input"
-              onChange={onChange}
-              name="cpassword"
-              id="cpassword"
-              minLength={6}
-              required
-              placeholder="Confirm your Password"
-              value={credentials.cpassword}
-            />
-          </div>
-
-          <button 
-            className="button-submit" 
-            type="submit"
-            disabled={loading}
-          >
-            {loading ? 'Creating Account...' : 'Sign Up'}
-          </button>
-        </form>
-      </StyledWrapper>
-    </>
-  );
-};*/}
+export default Signup;
 
 
 
@@ -428,4 +273,3 @@ const StyledWrapper = styled.div`
   }
 `;
 
-export default Signup;

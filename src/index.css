@@ -1,0 +1,8 @@
+.alert {
+    opacity: 1;
+    transition: opacity 0.5s ease; /* fade animation */
+  }
+  
+  .alert.hide {
+    opacity: 0;
+  }
