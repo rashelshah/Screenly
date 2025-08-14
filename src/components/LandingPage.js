@@ -310,7 +310,10 @@ const LandingPage = (props) => {
                       key={item.id} 
                       className="similar-item"
                       onClick={() => {
-                        window.scrollTo(0, 0);
+                        window.scrollTo({
+                              top: 0,
+                              behavior: 'smooth' // smooth scrolling
+                            });
                         setIsSimilarLoading(true);
 
                         // Navigate to the new movie/show page
