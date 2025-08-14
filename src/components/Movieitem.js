@@ -37,9 +37,10 @@ const Movieitem = (props) => {
 
   const handleClick = () => {
     navigate('/landingpage', { 
-      state: { title, poster, overview, genre_id, id, media_type: props.media_type } 
+      state: { title, poster, overview, genre_id, id, media_type: props.media_type }
     });
   };
+
 
   const formattedDate = new Date(date).toLocaleDateString('en-US', {
     year: 'numeric',

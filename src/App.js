@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import './App.css';
 import Movies from './components/Movies';
 import Navbar from './components/Navbar';
@@ -6,18 +6,21 @@ import LandingPage from './components/LandingPage';
 import {
   Routes,
   Route,
+  useLocation, 
+  useNavigate
 } from "react-router-dom";
 import Login from './components/Authentication/Login';
 import Signup from './components/Authentication/Signup';
 import Watchlist from './components/Watchlist'; 
 
 
-
 function App() {
   const apiKey = process.env.REACT_APP_API_KEY; 
   const [alert, setAlert] = useState(null);
+  const location = useLocation();
+  const navigate = useNavigate();
   
-  
+
   const showAlert = (message, type)=>{
     setAlert({
     message: message,
@@ -25,15 +28,48 @@ function App() {
     });
     setTimeout(() => {
       setAlert(null);
-    }, 1500);
+    }, 700);
   }
 
+ // Component to handle Google OAuth callback
+ const GoogleAuthHandler = () => {
+  const location = useLocation();
 
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const loginStatus = urlParams.get('login');
+    const token = urlParams.get('token');
+    const error = urlParams.get('error');
+
+    if (loginStatus === 'success' && token) {
+      // Store the token
+      localStorage.setItem('auth-token', token);
+      showAlert('Logged in successfully with Google!', 'success');
+      
+      // Clean up URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+    } else if (error) {
+      let errorMessage = 'Login failed';
+      if (error === 'auth_failed') {
+        errorMessage = 'Google authentication failed';
+      } else if (error === 'server_error') {
+        errorMessage = 'Server error occurred';
+      }
+      showAlert(errorMessage, 'danger');
+      
+      // Clean up URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }, [location]);
+
+  return null; // This component doesn't render anything
+};
 
 
   return (
    <>
-    <Navbar alert={alert}/>
+       <GoogleAuthHandler/>
+    <Navbar alert={alert} />
     <Routes>
       <Route path="/" element={<Movies  apiKey={apiKey}/>}/>
       <Route path="/home" element={<Movies apiKey={apiKey}/>}/>
@@ -72,6 +108,7 @@ function App() {
       <Route path="/landingpage" element={<LandingPage apiKey={apiKey}/>}/>
 
       <Route path="/watchlist" element={<Watchlist />} />
+      
       
     </Routes>
    </>
