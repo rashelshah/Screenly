@@ -16,9 +16,10 @@ const LandingPage = (props) => {
   const [similarContent, setSimilarContent] = useState([]);
   const [isSimilarLoading, setIsSimilarLoading] = useState(true);
 
-useEffect(() => {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}, [id]);
+  useEffect(() => {
+    document.documentElement.scrollTop = 0; // Reset scroll position
+  }, []);
+
   // Update the trailer fetching useEffect
   useEffect(() => {
     const fetchTrailer = async () => {
@@ -314,6 +315,8 @@ useEffect(() => {
 
                         // Navigate to the new movie/show page
                         setTimeout(() => {
+                          document.body.scrollTop = 0; // For Safari
+                          document.documentElement.scrollTop = 0; // For Chrome, Firefox, etc.
                           navigate('/landingpage', {
                             state: {
                               title: item.title || item.name,
@@ -324,7 +327,7 @@ useEffect(() => {
                               media_type: media_type
                             }
                           });
-                        }, 300); // 300ms works well
+                        }, 200); // 300ms works well
                       }}
                       style={{ cursor: 'pointer' }}
                     >
