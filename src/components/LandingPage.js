@@ -1,13 +1,13 @@
-import React,{useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './LandingPage.css';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faFilm } from '@fortawesome/free-solid-svg-icons';
+import { faFilm, faStar, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 const LandingPage = (props) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { title, poster, overview, genre_id, id, media_type  } = location.state || {};
+  const { title, poster, overview, genre_id, id, media_type } = location.state || {};
   const [cast, setCast] = useState([]);
   const [inWatchlist, setInWatchlist] = useState(false);
   const [trailer, setTrailer] = useState(null);
@@ -15,16 +15,50 @@ const LandingPage = (props) => {
   const [trailerError, setTrailerError] = useState(null);
   const [similarContent, setSimilarContent] = useState([]);
   const [isSimilarLoading, setIsSimilarLoading] = useState(true);
+  const [reviews, setReviews] = useState([]);
+  const [isReviewsLoading, setIsReviewsLoading] = useState(true);
+  const [reviewText, setReviewText] = useState('');
+  const [rating, setRating] = useState(5);
+  const [expandedReviews, setExpandedReviews] = useState({});
 
- 
+  // Calculate review statistics
+  const calculateReviewStats = () => {
+    if (!reviews || reviews.length === 0) return { average: 0, count: 0 };
+
+    const validReviews = reviews.filter(review => 
+      review.author_details?.rating && !isNaN(review.author_details.rating)
+    );
+    
+    if (validReviews.length === 0) return { average: 0, count: 0 };
+
+    const total = validReviews.reduce((sum, review) => sum + review.author_details.rating, 0);
+    const average = total / validReviews.length;
+    
+    return {
+      average: parseFloat(average.toFixed(1)),
+      count: reviews.length
+    };
+  };
+
+  const reviewStats = calculateReviewStats();
+
+  // Initialize from localStorage
   useEffect(() => {
-    // Force Safari + Chrome + Firefox to reset scroll
+    const storedReviews = JSON.parse(localStorage.getItem('movieReviews')) || {};
+    const mediaKey = `${media_type}-${id}`;
+    
+    if (storedReviews[mediaKey]) {
+      setReviews(storedReviews[mediaKey]);
+      setIsReviewsLoading(false);
+    }
+  }, [id, media_type]);
+
+  useEffect(() => {
     setTimeout(() => {
       window.scrollTo(0, 0);
     }, 0);
   }, [location.key]);
 
-  // Update the trailer fetching useEffect
   useEffect(() => {
     const fetchTrailer = async () => {
       setIsTrailerLoading(true);
@@ -40,8 +74,6 @@ const LandingPage = (props) => {
           ? `https://api.themoviedb.org/3/movie/${id}/videos` 
           : `https://api.themoviedb.org/3/tv/${id}/videos`;
         
-        console.log('Fetching trailer from:', endpoint);
-        
         const response = await fetch(`${endpoint}?api_key=${props.apiKey || 'b3e9a66b3b6e02b9aafd6a5c465f7d3b'}&language=en-US`);
         
         if (!response.ok) {
@@ -49,7 +81,6 @@ const LandingPage = (props) => {
         }
         
         const data = await response.json();
-        console.log('Trailer API response:', data);
         
         if (!data.results || data.results.length === 0) {
           setTrailerError('No videos found for this title');
@@ -57,7 +88,6 @@ const LandingPage = (props) => {
           return;
         }
         
-        // Find the best quality English trailer
         const officialTrailer = data.results.find(video => 
           video.type === 'Trailer' && 
           video.official &&
@@ -76,7 +106,6 @@ const LandingPage = (props) => {
         const selectedTrailer = officialTrailer || fallbackTrailer || anyYouTubeVideo;
         
         if (selectedTrailer) {
-          console.log('Selected trailer:', selectedTrailer);
           setTrailer(selectedTrailer);
         } else {
           setTrailerError('No YouTube videos found for this title');
@@ -106,11 +135,9 @@ const LandingPage = (props) => {
     const movieIndex = watchlist.findIndex((movie) => movie.id === id);
 
     if (movieIndex !== -1) {
-      // Movie is already in watchlist, remove it
       watchlist.splice(movieIndex, 1);
       setInWatchlist(false);
     } else {
-      // Movie is not in watchlist, add it
       watchlist.push({ title, poster, overview, genre_id, id, media_type });
       setInWatchlist(true);
     }
@@ -148,7 +175,7 @@ const LandingPage = (props) => {
         const response = await fetch(url);
         if (!response.ok) throw new Error('Failed to fetch cast');
         const data = await response.json();
-        setCast(data.cast.slice(0, 12)); // Show top 12 cast members
+        setCast(data.cast.slice(0, 12));
 
       } catch (error) {
         console.error('Cast fetch error:', error);
@@ -159,7 +186,6 @@ const LandingPage = (props) => {
     fetchCast();
   }, [id, media_type]);
 
-  // Fetch similar content
   useEffect(() => {
     const fetchSimilarContent = async () => {
       setIsSimilarLoading(true);
@@ -175,7 +201,7 @@ const LandingPage = (props) => {
         if (!response.ok) throw new Error('Failed to fetch similar content');
         
         const data = await response.json();
-        setSimilarContent(data.results.slice(0, 9)); // Show top 12 similar items
+        setSimilarContent(data.results.slice(0, 9));
         
       } catch (error) {
         console.error('Similar content fetch error:', error);
@@ -188,12 +214,90 @@ const LandingPage = (props) => {
     fetchSimilarContent();
   }, [id, media_type, props.apiKey]);
 
-  // Handle potential missing data
+  useEffect(() => {
+    const fetchTMDBReviews = async () => {
+      try {
+        if (!id || !media_type) return;
+        
+        const endpoint = `https://api.themoviedb.org/3/${media_type}/${id}/reviews`;
+        const response = await fetch(`${endpoint}?api_key=${props.apiKey}&language=en-US&page=1`);
+        
+        if (!response.ok) throw new Error('Failed to fetch reviews');
+        
+        const data = await response.json();
+        
+        // Get user reviews from localStorage
+        const storedReviews = JSON.parse(localStorage.getItem('movieReviews')) || {};
+        const mediaKey = `${media_type}-${id}`;
+        const userReviews = storedReviews[mediaKey] || [];
+        
+        // Combine TMDB reviews with user reviews
+        setReviews([...userReviews, ...data.results]);
+        
+      } catch (error) {
+        console.error('Reviews fetch error:', error);
+        
+        // If TMDB fails, just show user reviews
+        const storedReviews = JSON.parse(localStorage.getItem('movieReviews')) || {};
+        const mediaKey = `${media_type}-${id}`;
+        const userReviews = storedReviews[mediaKey] || [];
+        setReviews(userReviews);
+      } finally {
+        setIsReviewsLoading(false);
+      }
+    };
+
+    // Only fetch from TMDB if we haven't loaded from localStorage yet
+    if (reviews.length === 0) {
+      fetchTMDBReviews();
+    }
+  }, [id, media_type, props.apiKey, reviews.length]);
+
+  const saveReviewsToStorage = (reviewsList) => {
+    const storedReviews = JSON.parse(localStorage.getItem('movieReviews')) || {};
+    const mediaKey = `${media_type}-${id}`;
+    
+    storedReviews[mediaKey] = reviewsList.filter(review => review.author === "You");
+    localStorage.setItem('movieReviews', JSON.stringify(storedReviews));
+  };
+
+  const handleReviewSubmit = (e) => {
+    e.preventDefault();
+    if (!reviewText.trim()) return;
+    
+    const newReview = {
+      id: Date.now(),
+      author: "You", 
+      content: reviewText,
+      created_at: new Date().toISOString(),
+      author_details: {
+        rating: rating
+      }
+    };
+    
+    const updatedReviews = [newReview, ...reviews];
+    setReviews(updatedReviews);
+    saveReviewsToStorage(updatedReviews);
+    setReviewText('');
+    setRating(5);
+  };
+
+  const handleDeleteReview = (reviewId) => {
+    const updatedReviews = reviews.filter(review => review.id !== reviewId);
+    setReviews(updatedReviews);
+    saveReviewsToStorage(updatedReviews);
+  };
+
+  const toggleReviewExpanded = (reviewId) => {
+    setExpandedReviews(prev => ({
+      ...prev,
+      [reviewId]: !prev[reviewId]
+    }));
+  };
+
   if (!location.state) return <div className="container">No movie data found</div>
 
   const genreNames = genre_id.map(id => genreMapping[id]);
-
-  console.log("Genre", genreNames)
   
   return (  
     <>
@@ -209,12 +313,12 @@ const LandingPage = (props) => {
               <p>{overview}</p>
             </div>
             <div className='genre'>
-            {genreNames.map((genre, i) => (
-            <span key={i} className='genre-box'>{genre} </span>
-            ))}
+              {genreNames.map((genre, i) => (
+                <span key={i} className='genre-box'>{genre} </span>
+              ))}
             </div>
             <div className='watchlist-button'>
-            <button
+              <button
                 type="button"
                 className="btn btn-outline-success mx-2"
                 onClick={toggleWatchlist}
@@ -281,13 +385,13 @@ const LandingPage = (props) => {
                     onClick={() => window.open(`https://www.google.com/search?q=${encodeURIComponent(member.name + ' actor')}`, '_blank')}
                     style={{ cursor: 'pointer' }}
                   >
-                  <img
-                    src={member.profile_path 
-                      ? `https://image.tmdb.org/t/p/w200${member.profile_path}`
-                      : 'https://via.placeholder.com/200x300?text=No+Image'}
-                    alt={member.name}
-                    className="cast-photo"
-                  />  
+                    <img
+                      src={member.profile_path 
+                        ? `https://image.tmdb.org/t/p/w200${member.profile_path}`
+                        : 'https://via.placeholder.com/200x300?text=No+Image'}
+                      alt={member.name}
+                      className="cast-photo"
+                    />  
                     <div className="cast-info">
                       <h4>{member.name}</h4>
                       <p>{member.character}</p>
@@ -314,10 +418,7 @@ const LandingPage = (props) => {
                       key={item.id} 
                       className="similar-item"
                       onClick={() => {
-                      
                         setIsSimilarLoading(true);
-
-                        // Navigate to the new movie/show page
                         setTimeout(() => {
                           navigate('/landingpage', {
                             state: {
@@ -329,7 +430,7 @@ const LandingPage = (props) => {
                               media_type: media_type
                             }
                           });
-                        }, 200); // 300ms works well
+                        }, 200);
                       }}
                       style={{ cursor: 'pointer' }}
                     >
@@ -347,13 +448,97 @@ const LandingPage = (props) => {
                         </p>
                         <p className="similar-year">
                           {item.release_date ? new Date(item.release_date).getFullYear() : 
-                           item.first_air_date ? new Date(item.first_air_date).getFullYear() : 'Unknown'}
+                          item.first_air_date ? new Date(item.first_air_date).getFullYear() : 'Unknown'}
                         </p>
                       </div>
                     </div>
                   ))}
                   {similarContent.length === 0 && <p>No similar content available</p>}
                 </div>
+              )}
+            </div>
+
+            <div className="reviews-section">
+              <h2>User Reviews</h2>
+              
+              <div className="overall-rating">
+                <div className="rating-big">{reviewStats.average || 'N/A'}</div>
+                <div className="rating-count">
+                  {reviewStats.count === 0 
+                    ? 'No reviews yet' 
+                    : `${reviewStats.count} ${reviewStats.count === 1 ? 'review' : 'reviews'}`}
+                </div>
+              </div>
+
+              <h3 className="featured-reviews-title">Featured reviews</h3>
+              
+              <form onSubmit={handleReviewSubmit} className="review-form">
+                <div className="rating-input">
+                  <label>Your Rating:</label>
+                  <select value={rating} onChange={(e) => setRating(Number(e.target.value))}>
+                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(num => (
+                      <option key={num} value={num}>{num}</option>
+                    ))}
+                  </select>
+                </div>
+                <textarea
+                  value={reviewText}
+                  onChange={(e) => setReviewText(e.target.value)}
+                  placeholder="Write your review..."
+                  rows="4"
+                />
+                <button type="submit" className="btn btn-outline-warning">Submit Review</button>
+              </form>
+              
+              {isReviewsLoading ? (
+                <div className="reviews-loading">
+                  <div className="spinner-border text-warning" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                  <p>Loading reviews...</p>
+                </div>
+              ) : reviews.length > 0 ? (
+                <div className="reviews-grid">
+                  {reviews.map((review) => {
+                    const isExpanded = expandedReviews[review.id];
+                    const content = isExpanded 
+                      ? review.content 
+                      : review.content.length > 150 
+                        ? review.content.slice(0, 150) + '...' 
+                        : review.content;
+                        
+                    return (
+                      <div key={review.id} className="review-item">
+                        <div className="review-rating-big">
+                          <FontAwesomeIcon icon={faStar} className="star-icon" />
+                          <span>{review.author_details?.rating || 'N/A'}</span>
+                        </div>
+                        <div className="review-header">
+                          <h4>{review.author}</h4>
+                          {review.author === "You" && (
+                            <button 
+                              onClick={() => handleDeleteReview(review.id)}
+                              className="delete-review-btn"
+                            >
+                              <FontAwesomeIcon icon={faTrash} />
+                            </button>
+                          )}
+                        </div>
+                        <p className="review-content">{content}</p>
+                        {review.content.length > 150 && (
+                          <button 
+                            className="read-more-btn"
+                            onClick={() => toggleReviewExpanded(review.id)}
+                          >
+                            {isExpanded ? 'Show less' : 'Read full review'}
+                          </button>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <p className="no-reviews">No reviews yet. Be the first to review!</p>
               )}
             </div>
           </div>
