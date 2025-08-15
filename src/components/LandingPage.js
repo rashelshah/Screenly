@@ -16,9 +16,13 @@ const LandingPage = (props) => {
   const [similarContent, setSimilarContent] = useState([]);
   const [isSimilarLoading, setIsSimilarLoading] = useState(true);
 
+ 
   useEffect(() => {
-    document.documentElement.scrollTop = 0; // Reset scroll position
-  }, []);
+    // Force Safari + Chrome + Firefox to reset scroll
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+    }, 0);
+  }, [location.key]);
 
   // Update the trailer fetching useEffect
   useEffect(() => {
@@ -315,8 +319,6 @@ const LandingPage = (props) => {
 
                         // Navigate to the new movie/show page
                         setTimeout(() => {
-                          document.body.scrollTop = 0; // For Safari
-                          document.documentElement.scrollTop = 0; // For Chrome, Firefox, etc.
                           navigate('/landingpage', {
                             state: {
                               title: item.title || item.name,
