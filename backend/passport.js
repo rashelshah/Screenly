@@ -1,12 +1,19 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
+const BACKEND = process.env.BACKEND_URL || `http://localhost:${process.env.PORT || 4000}`;
+
+
+if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
+  console.error('WARNING: GOOGLE_CLIENT_ID or GOOGLE_CLIENT_SECRET not set');
+}
+
+
 passport.use(new GoogleStrategy(
   {
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: "http://localhost:4000/auth/google/callback" // MUST match Google Cloud
-  },
+    callbackURL: `${BACKEND}/auth/google/callback`  },
   async (accessToken, refreshToken, profile, done) => {
     try {
       // You can save user to database here if needed
