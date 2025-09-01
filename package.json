@@ -64,6 +64,7 @@
   },
   "devDependencies": {
     "concurrently": "^9.1.2",
+    "nodemon": "^3.1.10",
     "webpack": "^5.98.0"
   }
 }
