@@ -76,14 +76,18 @@ const Login = (props) => {
           <p className="p">
             Create an account? <Link className="span" to="/signup">Sign Up</Link>
           </p>
-        <a href="http://localhost:4000/auth/google">
+        <a href={`${
+    process.env.REACT_APP_API_URL || "https://screenly-i27c.onrender.com"
+  }/auth/google`}>
         <button
   type="button"
   className="btn google"
   onClick={(e) => {
-    e.preventDefault(); // stop the form from submitting
-    window.location.href = "http://localhost:4000/auth/google";
-  }}
+  e.preventDefault(); // stop the form from submitting
+  window.location.href = `${
+    process.env.REACT_APP_API_URL || "https://screenly-i27c.onrender.com"
+  }/auth/google`;
+}}
 
 >
               <svg version="1.1" width={20} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
