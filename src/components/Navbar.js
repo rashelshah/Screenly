@@ -2,7 +2,7 @@ import Alert from './Alert';
 import React, { useState , useEffect} from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 
-function Navbar({alert}) {
+function Navbar({alert,authToken, setAuthToken}) {
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
@@ -15,6 +15,7 @@ function Navbar({alert}) {
 
   const handleLogout = () => {
     localStorage.removeItem("auth-token");
+    setAuthToken(null);
     navigate('/login');
   };
 
@@ -96,24 +97,24 @@ function Navbar({alert}) {
             </ul>
 
             <div className="ms-auto d-flex auth-buttons">
-              {!localStorage.getItem("auth-token") ? (
-                <>
-                  <Link to="/login" className="btn btn-outline-success mx-2">
-                    Login
-                  </Link>
-                  <Link to="/signup" className="btn btn-outline-success mx-2">
-                    Sign Up
-                  </Link>
-                </>
-              ) : (
-                <button 
-                  onClick={handleLogout} 
-                  className="btn btn-outline-success mx-2"
-                >
-                  Logout
-                </button>
-              )}
-            </div>
+  {!authToken ? (
+    <>
+      <Link to="/login" className="btn btn-outline-success mx-2">
+        Login
+      </Link>
+      <Link to="/signup" className="btn btn-outline-success mx-2">
+        Sign Up
+      </Link>
+    </>
+  ) : (
+    <button 
+      onClick={handleLogout} 
+      className="btn btn-outline-success mx-2"
+    >
+      Logout
+    </button>
+  )}
+</div>
           </div>
         </div>
       </nav>
