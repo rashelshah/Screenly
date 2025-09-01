@@ -8,12 +8,10 @@ const Signup = (props) => {
 
   const handleClick = async (e) => {
     e.preventDefault();
-    const response = await fetch("http://localhost:4000/api/auth/createuser", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ email: credentials.email, password: credentials.password, name: credentials.name }),
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: credentials.email, password: credentials.password }),
     });
     const json = await response.json();
     console.log(json);
@@ -107,14 +105,18 @@ const Signup = (props) => {
           </div>
           <button className="button-submit">Sign Up</button>
           <div className="flex-row-center">
-          <a href="http://localhost:4000/auth/google">
+          <a href={`${
+    process.env.REACT_APP_API_URL || "https://screenly-i27c.onrender.com"
+  }/auth/google`}>
         <button
-              type="button"
-              className="btn google"
-              onClick={(e) => {
-                e.preventDefault(); // stop the form from submitting
-                window.location.href = "http://localhost:4000/auth/google";
-              }}
+  type="button"
+  className="btn google"
+  onClick={(e) => {
+  e.preventDefault(); // stop the form from submitting
+  window.location.href = `${
+    process.env.REACT_APP_API_URL || "https://screenly-i27c.onrender.com"
+  }/auth/google`;
+}}
 
 >
               <svg version="1.1" width={20} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
