@@ -3,24 +3,44 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Signup = (props) => {
-  const [credentials, setCredentials] = useState({ email: "", password: "", name: "" });
+  const [credentials, setCredentials] = useState({ email: "", password: "", name: "", cpassword: "" });
   const navigate = useNavigate();
 
   const handleClick = async (e) => {
     e.preventDefault();
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/createuser`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: credentials.email, password: credentials.password }),
-    });
-    const json = await response.json();
-    console.log(json);
-    if (json.success) {
-      localStorage.setItem("auth-token", json.authtoken);
-      navigate('/');
-      props.showAlert("Account Created Successfully", "success");
-    } else {
-      props.showAlert("Invalid Details", "danger");
+    
+    // FIXED: Add password confirmation validation
+    if (credentials.password !== credentials.cpassword) {
+      props.showAlert("Passwords do not match", "danger");
+      return;
+    }
+
+    try {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/createuser`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          name: credentials.name, 
+          email: credentials.email, 
+          password: credentials.password 
+        }),
+      });
+      
+      const json = await response.json();
+      console.log(json);
+      
+      if (json.success) {
+        localStorage.setItem("auth-token", json.authtoken);
+        navigate('/');
+        props.showAlert("Account Created Successfully", "success");
+      } else {
+        // FIXED: Show specific error from backend
+        const errorMessage = json.error || (json.errors && json.errors[0]?.msg) || "Invalid Details";
+        props.showAlert(errorMessage, "danger");
+      }
+    } catch (error) {
+      console.error('Signup error:', error);
+      props.showAlert("Network error. Please try again.", "danger");
     }
   };
 
@@ -44,8 +64,9 @@ const Signup = (props) => {
               className="input"
               name="name"
               id="name"
+              value={credentials.name}
               onChange={onChange}
-              minLength={5}
+              minLength={3}
               required
               placeholder="Enter your Name"
             />
@@ -62,8 +83,8 @@ const Signup = (props) => {
               className="input"
               name="email"
               id="email"
+              value={credentials.email}
               onChange={onChange}
-              minLength={5}
               required
               placeholder="Enter your Email"
             />
@@ -82,6 +103,7 @@ const Signup = (props) => {
               onChange={onChange}
               name="password"
               id="password"
+              value={credentials.password}
               minLength={5}
               required
               placeholder="Enter your Password"
@@ -98,6 +120,7 @@ const Signup = (props) => {
               onChange={onChange}
               name="cpassword"
               id="cpassword"
+              value={credentials.cpassword}
               minLength={5}
               required
               placeholder="Confirm your Password"
@@ -105,60 +128,54 @@ const Signup = (props) => {
           </div>
           <button className="button-submit">Sign Up</button>
           <div className="flex-row-center">
-          <a href={`${
-    process.env.REACT_APP_API_URL || "https://screenly-i27c.onrender.com"
-  }/auth/google`}>
-        <button
-  type="button"
-  className="btn google"
-  onClick={(e) => {
-  e.preventDefault(); // stop the form from submitting
-  window.location.href = `${
-    process.env.REACT_APP_API_URL || "https://screenly-i27c.onrender.com"
-  }/auth/google`;
-}}
-
->
-              <svg version="1.1" width={20} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                <path style={{ fill: '#FBBB00' }} d="M113.47,309.408L95.648,375.94l-65.139,1.378C11.042,341.211,0,299.9,0,256c0-42.451,10.324-82.483,28.624-117.732h0.014l57.992,10.632l25.404,57.644c-5.317,15.501-8.215,32.141-8.215,49.456C103.821,274.792,107.225,292.797,113.47,309.408z" />
-                <path style={{ fill: '#518EF8' }} d="M507.527,208.176C510.467,223.662,512,239.655,512,256c0,18.328-1.927,36.206-5.598,53.451c-12.462,58.683-45.025,109.925-90.134,146.187l-0.014-0.014l-73.044-3.727l-10.338-64.535c29.932-17.554,53.324-45.025,65.646-77.911h-136.89V208.176h138.887L507.527,208.176z" />
-                <path style={{ fill: '#28B446' }} d="M416.253,455.624l0.014,0.014C372.396,490.901,316.666,512,256,512c-97.491,0-182.252-54.491-225.491-134.681l82.961-67.91c21.619,57.698,77.278,98.771,142.53,98.771c28.047,0,54.323-7.582,76.87-20.818L416.253,455.624z" />
-                <path style={{ fill: '#F14336' }} d="M419.404,58.936l-82.933,67.896c-23.335-14.586-50.919-23.012-80.471-23.012c-66.729,0-123.429,42.957-143.965,102.724l-83.397-68.276h-0.014C71.23,56.123,157.06,0,256,0C318.115,0,375.068,22.126,419.404,58.936z" />
-              </svg>
-              Google
-            </button>
-          </a>
+            <a href={`${process.env.REACT_APP_API_URL || "https://screenly-i27c.onrender.com"}/auth/google`}>
+              <button
+                type="button"
+                className="btn google"
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.location.href = `${process.env.REACT_APP_API_URL || "https://screenly-i27c.onrender.com"}/auth/google`;
+                }}
+              >
+                <svg version="1.1" width={20} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                  <path style={{ fill: '#FBBB00' }} d="M113.47,309.408L95.648,375.94l-65.139,1.378C11.042,341.211,0,299.9,0,256c0-42.451,10.324-82.483,28.624-117.732h0.014l57.992,10.632l25.404,57.644c-5.317,15.501-8.215,32.141-8.215,49.456C103.821,274.792,107.225,292.797,113.47,309.408z" />
+                  <path style={{ fill: '#518EF8' }} d="M507.527,208.176C510.467,223.662,512,239.655,512,256c0,18.328-1.927,36.206-5.598,53.451c-12.462,58.683-45.025,109.925-90.134,146.187l-0.014-0.014l-73.044-3.727l-10.338-64.535c29.932-17.554,53.324-45.025,65.646-77.911h-136.89V208.176h138.887L507.527,208.176z" />
+                  <path style={{ fill: '#28B446' }} d="M416.253,455.624l0.014,0.014C372.396,490.901,316.666,512,256,512c-97.491,0-182.252-54.491-225.491-134.681l82.961-67.91c21.619,57.698,77.278,98.771,142.53,98.771c28.047,0,54.323-7.582,76.87-20.818L416.253,455.624z" />
+                  <path style={{ fill: '#F14336' }} d="M419.404,58.936l-82.933,67.896c-23.335-14.586-50.919-23.012-80.471-23.012c-66.729,0-123.429,42.957-143.965,102.724l-83.397-68.276h-0.014C71.23,56.123,157.06,0,256,0C318.115,0,375.068,22.126,419.404,58.936z" />
+                </svg>
+                Google
+              </button>
+            </a>
           </div>
         </form>
       </StyledWrapper>
     </>
   );
 };
+
 export default Signup;
-
-
 
 const StyledWrapper = styled.div`
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* Changed from center to flex-start */
-  min-height: 100%; /* Use full height of parent container */
-  height: auto; /* Allow natural growth */
-  padding: 1rem; /* Reduced padding for smaller screens */
+  align-items: flex-start;
+  min-height: 100%;
+  height: auto;
+  padding: 1rem;
   background: linear-gradient(135deg, #1a1a1a, #0d0d0d, #000000);
 
   .form {
     display: flex;
     flex-direction: column;
-    gap: 8px; /* Slightly reduced gap */
+    gap: 8px;
     background-color: #1e1e1e;
-    padding: 20px; /* Reduced padding for smaller screens */
+    padding: 20px;
     width: 90%;
     max-width: 450px;
     border-radius: 20px;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    overflow-y: auto; /* Allow scrolling if content overflows */
+    overflow-y: auto;
   }
 
   ::placeholder {
@@ -169,13 +186,13 @@ const StyledWrapper = styled.div`
   .flex-column > label {
     color: #fff;
     font-weight: 600;
-    font-size: 14px; /* Slightly smaller font for labels */
+    font-size: 14px;
   }
 
   .inputForm {
     border: 1.5px solid #333;
     border-radius: 10px;
-    height: 45px; /* Reduced height for better fit */
+    height: 45px;
     display: flex;
     align-items: center;
     padding-left: 10px;
@@ -191,7 +208,7 @@ const StyledWrapper = styled.div`
     height: 100%;
     background-color: transparent;
     color: #fff;
-    font-size: 14px; /* Smaller font for inputs */
+    font-size: 14px;
   }
 
   .input:focus {
@@ -211,14 +228,14 @@ const StyledWrapper = styled.div`
   }
 
   .button-submit {
-    margin: 15px 0 10px 0; /* Reduced top margin */
+    margin: 15px 0 10px 0;
     background-color: #2d79f3;
     border: none;
     color: white;
     font-size: 15px;
     font-weight: 500;
     border-radius: 10px;
-    height: 45px; /* Reduced height */
+    height: 45px;
     width: 100%;
     cursor: pointer;
   }
@@ -227,10 +244,22 @@ const StyledWrapper = styled.div`
     background-color: #1a5bbf;
   }
 
+  .p {
+    text-align: center;
+    color: #ccc;
+    font-size: 14px;
+    margin: 5px 0;
+  }
+
+  .span {
+    color: #2d79f3;
+    cursor: pointer;
+  }
+
   .btn {
     margin-top: 10px;
     width: 100%;
-    height: 45px; /* Reduced height */
+    height: 45px;
     border-radius: 10px;
     display: flex;
     justify-content: center;
@@ -248,30 +277,28 @@ const StyledWrapper = styled.div`
     border: 1px solid #2d79f3;
   }
 
-  /* Media query for iPhones and smaller screens */
   @media (max-width: 768px) {
-    padding: 0.5rem; /* Further reduce padding */
+    padding: 0.5rem;
     .form {
-      padding: 15px; /* Smaller padding */
-      gap: 6px; /* Smaller gap */
+      padding: 15px;
+      gap: 6px;
     }
     .inputForm {
-      height: 40px; /* Smaller input height */
+      height: 40px;
     }
     .button-submit {
-      height: 40px; /* Smaller button height */
+      height: 40px;
       font-size: 14px;
     }
     .btn {
-      height: 40px; /* Smaller button height */
+      height: 40px;
       font-size: 14px;
     }
     .flex-column > label {
-      font-size: 12px; /* Smaller label font */
+      font-size: 12px;
     }
     .input {
-      font-size: 12px; /* Smaller input font */
+      font-size: 12px;
     }
   }
 `;
-

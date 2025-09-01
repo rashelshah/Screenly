@@ -10,19 +10,23 @@ const Login = (props) => {
 
   const handleClick = async (e) => {
     e.preventDefault();
+  
     const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: credentials.email, password: credentials.password }),
     });
+  
     const json = await response.json();
     console.log(json);
+  
     if (json.success) {
       localStorage.setItem('auth-token', json.authtoken);
       navigate('/');
       props.showAlert('Logged In Successfully', 'success');
     } else {
-      props.showAlert('Invalid Details', 'danger');
+      // Show the backend error instead of a generic message
+      props.showAlert(json.error || "Invalid Details", "danger");
     }
   };
 
