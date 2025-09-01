@@ -19,6 +19,7 @@ function App() {
   const [alert, setAlert] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
+  const [authToken, setAuthToken] = useState(localStorage.getItem("auth-token"));
   
 
   const showAlert = (message, type)=>{
@@ -32,44 +33,46 @@ function App() {
   }
 
  // Component to handle Google OAuth callback
- const GoogleAuthHandler = () => {
+ const GoogleAuthHandler = ({ setAuthToken, showAlert }) => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
-    const loginStatus = urlParams.get('login');
-    const token = urlParams.get('token');
-    const error = urlParams.get('error');
+    const loginStatus = urlParams.get("login");
+    const token = urlParams.get("token");
+    const error = urlParams.get("error");
 
-    if (loginStatus === 'success' && token) {
-      // Store the token
-      localStorage.setItem('auth-token', token);
-      showAlert('Logged in successfully with Google!', 'success');
-      
+    if (loginStatus === "success" && token) {
+      // Save token
+      localStorage.setItem("auth-token", token);
+      setAuthToken(token); // <-- update React state immediately
+      showAlert("Logged in successfully with Google!", "success");
+
+      // Redirect to homepage
+      navigate("/");
+
       // Clean up URL
       window.history.replaceState({}, document.title, window.location.pathname);
     } else if (error) {
-      let errorMessage = 'Login failed';
-      if (error === 'auth_failed') {
-        errorMessage = 'Google authentication failed';
-      } else if (error === 'server_error') {
-        errorMessage = 'Server error occurred';
-      }
-      showAlert(errorMessage, 'danger');
-      
+      let errorMessage = "Login failed";
+      if (error === "auth_failed") errorMessage = "Google authentication failed";
+      else if (error === "server_error") errorMessage = "Server error occurred";
+
+      showAlert(errorMessage, "danger");
+
       // Clean up URL
       window.history.replaceState({}, document.title, window.location.pathname);
     }
-  }, [location]);
+  }, [location, navigate, setAuthToken, showAlert]);
 
-  return null; // This component doesn't render anything
+  return null;
 };
-
 
   return (
    <>
-       <GoogleAuthHandler/>
-    <Navbar alert={alert} />
+       <GoogleAuthHandler setAuthToken={setAuthToken} showAlert={showAlert} />
+       <Navbar authToken={authToken} setAuthToken={setAuthToken} alert={alert} />
     <Routes>
       <Route path="/" element={<Movies  apiKey={apiKey}/>}/>
       <Route path="/home" element={<Movies apiKey={apiKey}/>}/>
