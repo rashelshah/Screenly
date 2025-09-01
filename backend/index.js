@@ -9,11 +9,17 @@ require('./passport'); // <-- we'll create this file for Google strategy
 
 connectToMongo();
 const app = express();
-const port = 4000;
+const port = process.env.PORT || 4000;
+
+// trust proxy to allow secure cookies behind Render
+app.set('trust proxy', 1);
 
 app.use(cors({
-  origin: "http://localhost:3000", // allow frontend
-  credentials: true
+  origin: [
+    'http://localhost:3000',
+    process.env.FRONTEND_URL || 'https://screenly-pi.vercel.app'
+  ],
+  credentials: true,
 }));
 
 app.use(express.json());
