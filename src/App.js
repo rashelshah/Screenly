@@ -32,6 +32,7 @@ function App() {
     }, 700);
   }
 
+
  // Component to handle Google OAuth callback
  const GoogleAuthHandler = ({ setAuthToken, showAlert }) => {
   const location = useLocation();
@@ -105,8 +106,8 @@ function App() {
       <Route path="/2023" element={<Movies year="2023" apiKey={apiKey} key={2023}/>}/>
 
     
-      <Route exact path="/login" element={<Login showAlert={showAlert}/>}/>
-      <Route exact path="/signup" element={<Signup showAlert={showAlert} />} />
+      <Route exact path="/login" element={<Login showAlert={showAlert} setAuthToken={setAuthToken}/>}/>
+      <Route exact path="/signup" element={<Signup showAlert={showAlert} setAuthToken={setAuthToken}/>} />
 
       <Route path="/landingpage" element={<LandingPage apiKey={apiKey}/>}/>
 
