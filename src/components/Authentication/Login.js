@@ -80,7 +80,7 @@ const Login = (props) => {
             Create an account? <Link className="span" to="/signup">Sign Up</Link>
           </p>
         <a href={`${
-    process.env.REACT_APP_API_URL || "https://screenly-i27c.onrender.com"
+    process.env.REACT_APP_API_URL || "https://screenly-1.onrender.com"
   }/auth/google`}>
         <button
   type="button"
@@ -88,7 +88,7 @@ const Login = (props) => {
   onClick={(e) => {
   e.preventDefault(); // stop the form from submitting
   window.location.href = `${
-    process.env.REACT_APP_API_URL || "https://screenly-i27c.onrender.com"
+    process.env.REACT_APP_API_URL || "https://screenly-1.onrender.com"
   }/auth/google`;
 }}
 

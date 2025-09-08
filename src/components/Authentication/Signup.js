@@ -129,13 +129,13 @@ const Signup = (props) => {
           </div>
           <button className="button-submit">Sign Up</button>
           <div className="flex-row-center">
-            <a href={`${process.env.REACT_APP_API_URL || "https://screenly-i27c.onrender.com"}/auth/google`}>
+            <a href={`${process.env.REACT_APP_API_URL || "https://screenly-1.onrender.com"}/auth/google`}>
               <button
                 type="button"
                 className="btn google"
                 onClick={(e) => {
                   e.preventDefault();
-                  window.location.href = `${process.env.REACT_APP_API_URL || "https://screenly-i27c.onrender.com"}/auth/google`;
+                  window.location.href = `${process.env.REACT_APP_API_URL || "https://screenly-1.onrender.com"}/auth/google`;
                 }}
               >
                 <svg version="1.1" width={20} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
