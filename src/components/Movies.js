@@ -30,7 +30,6 @@ const countries = {
 const Movies = (props) => {
   const location = useLocation();
   const [results, setResults] = useState([])
-  const [total_results, settotalResults] = useState(0)
   const [page, setPage] = useState(1)
   const [loading, setLoading] = useState(false)
   const [category, setCategory] = useState("movie");
@@ -73,6 +72,7 @@ const Movies = (props) => {
       setPage(1);
     };
     loadInitialData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.search, category]);
 
   const loadMore = async () => {
@@ -81,7 +81,6 @@ const Movies = (props) => {
     setHasMore(data.page < data.total_pages);
     setPage(prev => prev + 1);
   };
-  const movieList = "top_rated";
 
   const updateMovies = async ()=>{
      let url = `https://api.themoviedb.org/3/discover/${category}?api_key=${props.apiKey}&sort_by=popularity.desc`;   
@@ -106,7 +105,6 @@ const Movies = (props) => {
   let parsedData = await data.json();
     setResults(parsedData.results)
     setLoading(false);
-    settotalResults(parsedData.total_results) 
     setPage(1);
   }
 
@@ -114,6 +112,7 @@ const Movies = (props) => {
 
   useEffect(() => { 
      updateMovies();
+     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.genre_id, props.country,props.year,category, props.movieList]);
 
   const getActiveFilters = () => {

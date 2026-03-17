@@ -17,8 +17,6 @@ import Watchlist from './components/Watchlist';
 function App() {
   const apiKey = process.env.REACT_APP_API_KEY; 
   const [alert, setAlert] = useState(null);
-  const location = useLocation();
-  const navigate = useNavigate();
   const [authToken, setAuthToken] = useState(localStorage.getItem("auth-token"));
   
 
